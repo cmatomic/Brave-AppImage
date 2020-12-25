@@ -1,0 +1,89 @@
+
+name: Release
+on:
+  schedule:
+    - cron: "5 */12 * * *"
+  push:
+    branches:
+      - "master"
+
+
+jobs:
+  Firefox:
+    runs-on: ubuntu-16.04
+    strategy:
+
+name: Release
+on:
+  schedule:
+    - cron: "5 */12 * * *"
+  push:
+    branches:
+      - "master"
+
+
+jobs:
+  Firefox:
+    runs-on: ubuntu-16.04
+    strategy:
+      matrix:
+        version: ['3.8']
+    steps:
+    - uses: actions/checkout@v2
+
+    - name: Download Brave
+      run: |
+        mkdir  /Brave.AppImage
+        cd  /Brave.AppImage
+        curl -s https://api.github.com/repos/brave/brave-browser/releases/latest | jq -r ".assets[] | select(.name | contains(\"amd64.deb\")) | .browser_download_url" | wget -i -
+        dpkg-deb -R ./brave*.deb brave-browser.appdir
+        cd ./brave-browser.appdir
+        rm -rf ./DEBIAN
+
+    - name: Patch to include files
+      run: |
+        cp ./usr/share/applications/brave*.desktop ./brave.desktop
+        cp ./opt/brave.com/brave/product_logo_256.png ./
+        sed -i 's/Icon=brave-browser/'"Icon=product_logo_256"'/' brave.desktop
+        ln -sr ./opt/brave.com/brave/brave-browser ./AppRun
+        cd ..
+    
+    - name: Patch AppImage
+      run: |
+
+        wget https://github.com/AppImage/AppImageKit/releases/download/continuous/appimagetool-x86_64.AppImage
+        chmod +x appimagetool-x86_64.AppImage
+        ./appimagetool-x86_64.AppImage --comp gzip brave-browser.appdir -n -u 'gh-releases-zsync|cmatomic|Brave-AppImage|continuous|Brave*.AppImage.zsync'
+        mkdir dist
+        mv Brave*.AppImage dist/.
+        mv *zsync dist/.
+        cd dist
+        chmod +x *.AppImage
+        cd ..
+       
+
+    - name: Upload artifact
+      uses: actions/upload-artifact@v1.0.0
+      with:
+        name: Brave-continuous-x86_64.AppImage
+        path: 'Brave/dist'
+
+  Release:
+    needs: [Brave]
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/download-artifact@v1
+      with:
+        name: Brave-continuous-x86_64.AppImage
+
+    - name: Release
+      uses: marvinpinto/action-automatic-releases@latest
+      with:
+        title: Brave AppImage Builds
+        automatic_release_tag: stable
+        prerelease: false
+        draft: false
+        files: |
+          Brave-continuous-x86_64.AppImage
+        repo_token: ${{ secrets.GITHUB_TOKEN }}
