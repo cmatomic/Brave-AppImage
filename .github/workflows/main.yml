@@ -20,8 +20,8 @@ jobs:
 
     - name: Download Brave
       run: |
-        mkdir  /Brave.AppImage
-        cd  /Brave.AppImage
+        mkdir  ~/Brave.AppImage
+        cd  ~/Brave.AppImage
         curl -s https://api.github.com/repos/brave/brave-browser/releases/latest | jq -r ".assets[] | select(.name | contains(\"amd64.deb\")) | .browser_download_url" | wget -i -
         dpkg-deb -R ./brave*.deb brave-browser.appdir
         cd ./brave-browser.appdir
