@@ -32,7 +32,7 @@ jobs:
         cd  ~/Brave.AppImage
         cd ./brave-browser.appdir
         cp ./usr/share/applications/brave*.desktop ./brave.desktop
-        cp ./opt/brave.com/brave/product_logo_256.png ./
+        cp ./opt/brave.com/brave/brave-dev/product_logo_128_dev.png ./
         sed -i 's/Icon=brave-browser/'"Icon=product_logo_256"'/' brave.desktop
         ln -sr ./opt/brave.com/brave/brave-browser ./AppRun
         cd ..
