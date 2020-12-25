@@ -9,7 +9,7 @@ on:
 
 
 jobs:
-  Firefox:
+  Brave:
     runs-on: ubuntu-16.04
     strategy:
 
