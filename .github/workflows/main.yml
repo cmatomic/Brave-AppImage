@@ -30,6 +30,7 @@ jobs:
     - name: Patch to include files
       run: |
         cd  ~/Brave.AppImage
+        cd ./brave-browser.appdir
         cp ./usr/share/applications/brave*.desktop ./brave.desktop
         cp ./opt/brave.com/brave/product_logo_256.png ./
         sed -i 's/Icon=brave-browser/'"Icon=product_logo_256"'/' brave.desktop
@@ -38,6 +39,8 @@ jobs:
     
     - name: Patch AppImage
       run: |
+        cd  ~/Brave.AppImage
+        cd ./brave-browser.appdir
         wget https://github.com/AppImage/AppImageKit/releases/download/continuous/appimagetool-x86_64.AppImage
         chmod +x appimagetool-x86_64.AppImage
         ./appimagetool-x86_64.AppImage --comp gzip brave-browser.appdir -n -u 'gh-releases-zsync|cmatomic|Brave-AppImage|continuous|Brave*.AppImage.zsync'
