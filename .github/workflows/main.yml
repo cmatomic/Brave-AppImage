@@ -12,20 +12,6 @@ jobs:
   Brave:
     runs-on: ubuntu-16.04
     strategy:
-
-name: Release
-on:
-  schedule:
-    - cron: "5 */12 * * *"
-  push:
-    branches:
-      - "master"
-
-
-jobs:
-  Firefox:
-    runs-on: ubuntu-16.04
-    strategy:
       matrix:
         version: ['3.8']
     steps:
