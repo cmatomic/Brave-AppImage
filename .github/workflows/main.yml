@@ -24,8 +24,9 @@ jobs:
         cd  ~/Brave.AppImage
         curl -s https://api.github.com/repos/brave/brave-browser/releases/latest | jq -r ".assets[] | select(.name | contains(\"amd64.deb\")) | .browser_download_url" | wget -i -
         dpkg-deb -R ./brave*.deb brave-browser.appdir
-        cd ./brave-browser.appdir
-        wget https://github.com/cmatomic/Brave-AppImage/raw/main/product_logo_256_nightly.png ./opt/brave.com/brave-nightly/
+        cd ./brave-browser.appdir 
+        wget https://github.com/cmatomic/Brave-AppImage/raw/main/product_logo_256_nightly.png
+        cp product_logo_256_nightly.png  ./opt/brave.com/brave-nightly/
         rm -rf ./DEBIAN
 
     - name: Patch to include files
