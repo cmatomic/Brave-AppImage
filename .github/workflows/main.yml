@@ -26,7 +26,6 @@ jobs:
         dpkg-deb -R ./brave*.deb brave-browser.appdir
         cd ./brave-browser.appdir 
         wget https://github.com/cmatomic/Brave-AppImage/raw/main/product_logo_256_nightly.png
-        #cp product_logo_256_nightly.png  ./opt/brave.com/brave-nightly/
         rm -rf ./DEBIAN
 
     - name: Patch to include files
